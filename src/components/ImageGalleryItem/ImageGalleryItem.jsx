@@ -1,10 +1,10 @@
 import React from 'react';
 
-export const ImageGalleryItem = ({ key, webImage, largeImage }) => {
+export const ImageGalleryItem = ({ webImage, tags }) => {
   return (
     <>
-      <li key={key} className="gallery-item">
-        <img src={webImage} alt="photoCard" />
+      <li className="gallery-item">
+        <img src={webImage} alt={tags} />
       </li>
     </>
   );
