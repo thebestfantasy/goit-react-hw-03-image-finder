@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { getPhotosBySearch } from './API/api';
-import { ImageGallery } from './ImageGallery/ImageGallery';
+
 import Searchbar from './Searchbar/Searchbar';
 import Loader from './Loader/Loader';
 import { toast } from 'react-toastify';
+import ImageGallery from './ImageGallery/ImageGallery';
+import Button from './Button/Button';
 
 class App extends Component {
   state = {
@@ -33,8 +35,8 @@ class App extends Component {
     try {
       this.setState({ isLoading: true });
       const data = await getPhotosBySearch(this.state.query);
-      toast.info(`Total: ${data.totalHits}`);
       this.setState({ images: data.hits });
+      // toast.info(`Total: ${data.totalHits}`);
     } catch (error) {
       this.setState({ error: error.message });
       toast.error(error.message);
@@ -42,6 +44,8 @@ class App extends Component {
       this.setState({ isLoading: false });
     }
   };
+
+  paginationHandler = () => {};
 
   handleSubmit = value => {
     // const data = await getPhotosBySearch(value);
@@ -60,6 +64,7 @@ class App extends Component {
         {isLoading && <Loader />}
         {error && <h2>{error}</h2>}
         {images && <ImageGallery images={images} />}
+        {images && <Button onClick={this.paginationHandler} />}
       </>
     );
   }

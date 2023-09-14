@@ -1,14 +1,14 @@
 import React from 'react';
+import { ModalStyled, Overlay } from './Modal.Styled';
 
-const Modal = () => {
+const Modal = ({ imgURL, alt, closeModal }) => {
   return (
-    <>
-      <div class="overlay">
-        <div class="modal">
-          <img src="" alt="" />
-        </div>
-      </div>
-    </>
+    <Overlay onClick={closeModal}>
+      {/* <Overlay onClick={closeModal} onKeyDown={onKeyDown}> */}
+      <ModalStyled>
+        <img src={imgURL} alt={alt} />
+      </ModalStyled>
+    </Overlay>
   );
 };
 
