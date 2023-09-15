@@ -10,33 +10,30 @@ import Button from './Button/Button';
 class App extends Component {
   state = {
     query: '',
-    images: null,
+    images: [],
     isLoading: false,
     error: '',
+    page: 1,
   };
 
-  // componentDidMount() {
-  //   this.getAllPhotos();
-  // }
-
-  // handleSearch = async e => {
-  //   e.preventDefault();
-  //   const data = await getPhotosBySearch(e.target[1].value);
-  //   this.setState({ images: [...data.hits] });
-  // };
-
   componentDidUpdate = (_, prevState) => {
-    if (prevState.query !== this.state.query) {
+    if (
+      prevState.query !== this.state.query ||
+      prevState.page !== this.state.page
+    ) {
       this.apiQuery();
+      // console.log(this.state);
     }
   };
 
   apiQuery = async () => {
     try {
       this.setState({ isLoading: true });
-      const data = await getPhotosBySearch(this.state.query);
-      this.setState({ images: data.hits });
+      const data = await getPhotosBySearch(this.state.query, this.state.page);
+
+      this.setState({ images: [...this.state.images, ...data.hits] });
       // toast.info(`Total: ${data.totalHits}`);
+      console.log(data);
     } catch (error) {
       this.setState({ error: error.message });
       toast.error(error.message);
@@ -45,46 +42,28 @@ class App extends Component {
     }
   };
 
-  paginationHandler = () => {};
+  increasePage = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+
+    // this.apiQuery(this.state.page);
+  };
 
   handleSubmit = value => {
-    // const data = await getPhotosBySearch(value);
     this.setState({ query: value });
-
-    // this.setState({ images: [...data.hits] });
-    // this.setState({ images: value });
   };
 
   render() {
     const { isLoading, images, error } = this.state;
     return (
       <>
-        {/* <Searchbar handleSearch={this.handleSearch} /> */}
         <Searchbar onSubmit={this.handleSubmit} />
         {isLoading && <Loader />}
         {error && <h2>{error}</h2>}
-        {images && <ImageGallery images={images} />}
-        {images && <Button onClick={this.paginationHandler} />}
+        {images.length > 0 && <ImageGallery images={images} />}
+        {images.length > 0 && <Button onClick={this.increasePage} />}
       </>
     );
   }
 }
-
-// export const App = () => {
-//   return (
-//     <div
-//       style={{
-//         height: '100vh',
-//         display: 'flex',
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         fontSize: 40,
-//         color: '#010101'
-//       }}
-//     >
-//       React homework template
-//     </div>
-//   );
-// };
 
 export default App;
