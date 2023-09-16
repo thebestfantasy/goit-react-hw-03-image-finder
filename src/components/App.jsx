@@ -47,7 +47,7 @@ class App extends Component {
     this.setState(prevState => ({ page: prevState.page + 1 }));
 
     window.scrollBy({
-      top: 100 * 3,
+      top: 300,
       behavior: 'smooth',
     });
   };
