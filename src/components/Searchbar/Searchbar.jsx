@@ -1,5 +1,12 @@
 import { Component } from 'react';
-// import { getPhotosBySearch } from '../API/api';
+import {
+  SearchFormButtonStyled,
+  SearchFormInputStyled,
+  SearchFormStyled,
+  SearchbarHeaderStyled,
+} from './SearchbarStyled';
+import { FaSearch } from 'react-icons/fa';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 class Searchbar extends Component {
   state = {
@@ -7,37 +14,29 @@ class Searchbar extends Component {
   };
 
   handleSearch = e => {
-    this.setState({ searchQuery: e.target.value });
+    this.setState({ searchQuery: e.target.value.trim() });
   };
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.onSubmit(this.state.searchQuery);
+    if (this.state.searchQuery.length > 2) {
+      this.props.onSubmit(this.state.searchQuery);
+    } else {
+      Notify.warning('Enter more than 2 symbols, please');
+    }
     // this.setState({ searchQuery: '' });
   };
-
-  // componentDidUpdate = (_, prevState) => {
-  //   if (prevState.searchQuery !== this.state.searchQuery) {
-  //     // this.apiQuery();
-  //     this.props.onSubmit(this.state.searchQuery);
-  //   }
-  // };
-
-  // apiQuery = async () => {
-  //   const data = await getPhotosBySearch(this.state.searchQuery);
-  //   this.setState({ images: [...data.hits] });
-  // };
 
   render() {
     return (
       <>
-        <header className="searchbar">
-          <form className="form" onSubmit={this.handleSubmit}>
-            <button type="submit" className="button">
-              <span className="button-label">Search</span>
-            </button>
+        <SearchbarHeaderStyled>
+          <SearchFormStyled onSubmit={this.handleSubmit}>
+            <SearchFormButtonStyled type="submit" className="button">
+              <FaSearch />
+            </SearchFormButtonStyled>
 
-            <input
+            <SearchFormInputStyled
               className="input"
               type="text"
               autoComplete="off"
@@ -46,31 +45,11 @@ class Searchbar extends Component {
               onChange={this.handleSearch}
               value={this.state.searchQuery}
             />
-          </form>
-        </header>
+          </SearchFormStyled>
+        </SearchbarHeaderStyled>
       </>
     );
   }
 }
-
-// const Searchbar = onSubmit => {
-//   return (
-//     <header className="searchbar">
-//       <form className="form">
-//         <button type="submit" className="button">
-//           <span className="button-label">Search</span>
-//         </button>
-
-//         <input
-//           className="input"
-//           type="text"
-//           autocomplete="off"
-//           autofocus
-//           placeholder="Search images and photos"
-//         />
-//       </form>
-//     </header>
-//   );
-// };
 
 export default Searchbar;

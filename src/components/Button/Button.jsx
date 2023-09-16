@@ -1,11 +1,13 @@
 import React from 'react';
-import { LoadButton } from './Button.Styled';
+import { LoadButton, LoadContainer } from './Button.Styled';
 
 const Button = ({ onClick }) => {
   return (
-    <LoadButton type="button" onClick={onClick}>
-      Load More
-    </LoadButton>
+    <LoadContainer>
+      <LoadButton type="button" onClick={onClick}>
+        Load More
+      </LoadButton>
+    </LoadContainer>
   );
 };
 

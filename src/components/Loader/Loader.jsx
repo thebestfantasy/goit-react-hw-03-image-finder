@@ -1,9 +1,10 @@
 import React from 'react';
 import { Vortex } from 'react-loader-spinner';
+import { LoaderStyled } from './Loader.Styled';
 
 const Loader = () => {
   return (
-    <div>
+    <LoaderStyled>
       <Vortex
         visible={true}
         height="150"
@@ -11,7 +12,7 @@ const Loader = () => {
         ariaLabel="blocks-loading"
         wrapperClass="blocks-wrapper"
       />
-    </div>
+    </LoaderStyled>
   );
 };
 

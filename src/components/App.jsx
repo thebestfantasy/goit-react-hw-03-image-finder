@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { getPhotosBySearch } from './API/api';
-
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import Searchbar from './Searchbar/Searchbar';
 import Loader from './Loader/Loader';
-import { toast } from 'react-toastify';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
+import { AppStyled } from './App.Styled';
 
 class App extends Component {
   state = {
@@ -14,16 +14,15 @@ class App extends Component {
     isLoading: false,
     error: '',
     page: 1,
+    loadMore: false,
   };
 
   componentDidUpdate = (_, prevState) => {
     if (
       prevState.query !== this.state.query ||
       prevState.page !== this.state.page
-    ) {
+    )
       this.apiQuery();
-      // console.log(this.state);
-    }
   };
 
   apiQuery = async () => {
@@ -31,12 +30,14 @@ class App extends Component {
       this.setState({ isLoading: true });
       const data = await getPhotosBySearch(this.state.query, this.state.page);
 
-      this.setState({ images: [...this.state.images, ...data.hits] });
-      // toast.info(`Total: ${data.totalHits}`);
-      console.log(data);
+      this.setState({
+        images: [...this.state.images, ...data.hits],
+        loadMore: this.state.page < Math.ceil(data.totalHits / 12),
+      });
+      Notify.success(`Total: ${data.totalHits}`);
     } catch (error) {
       this.setState({ error: error.message });
-      toast.error(error.message);
+      Notify.failure(error.message);
     } finally {
       this.setState({ isLoading: false });
     }
@@ -45,23 +46,28 @@ class App extends Component {
   increasePage = () => {
     this.setState(prevState => ({ page: prevState.page + 1 }));
 
-    // this.apiQuery(this.state.page);
+    window.scrollBy({
+      top: 100 * 3,
+      behavior: 'smooth',
+    });
   };
 
   handleSubmit = value => {
-    this.setState({ query: value });
+    this.setState({ query: value, images: [], page: 1 });
   };
 
   render() {
-    const { isLoading, images, error } = this.state;
+    const { isLoading, images, error, loadMore } = this.state;
     return (
-      <>
+      <AppStyled>
         <Searchbar onSubmit={this.handleSubmit} />
         {isLoading && <Loader />}
         {error && <h2>{error}</h2>}
         {images.length > 0 && <ImageGallery images={images} />}
-        {images.length > 0 && <Button onClick={this.increasePage} />}
-      </>
+        {images.length > 0 && loadMore && (
+          <Button onClick={this.increasePage} />
+        )}
+      </AppStyled>
     );
   }
 }
