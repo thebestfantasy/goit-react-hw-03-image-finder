@@ -10,13 +10,13 @@ class ImageGallery extends Component {
     selectedImage: null,
   };
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyDown);
-  }
+  // componentDidMount() {
+  //   document.addEventListener('keydown', this.handleKeyDown);
+  // }
 
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyDown);
-  }
+  // componentWillUnmount() {
+  //   document.removeEventListener('keydown', this.handleKeyDown);
+  // }
 
   openModal = image => {
     this.setState({ selectedImage: image });
@@ -26,15 +26,15 @@ class ImageGallery extends Component {
     this.setState({ selectedImage: null });
   };
 
-  handleKeyDown = e => {
-    if (e.keyCode === 27) {
-      this.closeModal();
-    }
-  };
+  // handleKeyDown = e => {
+  //   if (e.keyCode === 27) {
+  //     this.closeModal();
+  //   }
+  // };
 
-  handleBackDropClick = e => {
-    if (e.currentTarget === e.target) this.closeModal();
-  };
+  // handleBackDropClick = e => {
+  //   if (e.currentTarget === e.target) this.closeModal();
+  // };
 
   render() {
     const { selectedImage } = this.state;
@@ -54,8 +54,7 @@ class ImageGallery extends Component {
           <Modal
             imgURL={selectedImage.largeImageURL}
             alt={selectedImage.tags}
-            closeModal={this.handleBackDropClick}
-            onKeyDown={this.handleKeyDown}
+            closeModal={this.closeModal}
           >
             children
           </Modal>
