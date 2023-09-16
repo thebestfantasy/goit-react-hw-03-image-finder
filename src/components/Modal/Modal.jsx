@@ -1,4 +1,3 @@
-import React from 'react';
 import { ModalStyled, Overlay } from './Modal.Styled';
 import { Component } from 'react';
 
